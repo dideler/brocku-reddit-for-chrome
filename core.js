@@ -6,30 +6,27 @@ var OnFeedSuccess = null;
 var OnFeedFail = null;
 var retryMilliseconds = 120000;
 
-function SetInitialOption(key, value) {
-	if (localStorage[key] == null) {
-		localStorage[key] = value;
-	}
+function SetInitialOption(key, value)
+{
+  if (localStorage[key] == null) localStorage[key] = value;
 }
 
-function UpdateIfReady(force) {
+function UpdateIfReady(force)
+{
   var lastRefresh = parseFloat(localStorage["HN.LastRefresh"]);
   var interval = parseFloat(localStorage["HN.RequestInterval"]);
 	var nextRefresh = lastRefresh + interval;
 	var curTime = parseFloat((new Date()).getTime());
 	var isReady = (curTime > nextRefresh);
 	var isNull = (localStorage["HN.LastRefresh"] == null);
-  if ((force == true) || (localStorage["HN.LastRefresh"] == null)) {
+  if ((force == true) || (localStorage["HN.LastRefresh"] == null) || (isReady))
+  {
     UpdateFeed();
   }
-	else {
-	  if (isReady) {
-	    UpdateFeed();
-	  }
-	}
 }
 
-function UpdateFeed() {
+function UpdateFeed()
+{
   req = new XMLHttpRequest();
   req.onload = HandleRssResponse;
   req.onerror = handleError;
@@ -37,104 +34,110 @@ function UpdateFeed() {
   req.send(null);
 }
 
-function HandleRssResponse() {
+function HandleRssResponse()
+{
   var doc = req.responseXML;
-  if (!doc) {
+  if (!doc)
+  {
     doc = parseXml(req.responseText);
   }
-  if (!doc) {
+  if (!doc)
+  {
     handleFeedParsingFailed("Not a valid feed.");
     return;
   }
  	links = parseHNLinks(doc);
- 	if (localStorage['HN.Notifications'] == 'true') {
-    if (localStorage['HN.LastNotificationTitle'] == null || localStorage['HN.LastNotificationTitle'] != links[0].Title) {
+ 	if (localStorage['HN.Notifications'] == 'true')
+  {
+    if (localStorage['HN.LastNotificationTitle'] == null || localStorage['HN.LastNotificationTitle'] != links[0].Title)
+    {
       ShowLinkNotification(links[0]);
       localStorage['HN.LastNotificationTitle'] = links[0].Title;
     }
  	}
 	SaveLinksToLocalStorage(links);
-	if (buildPopupAfterResponse == true) {
+	if (buildPopupAfterResponse == true)
+  {
 		buildPopup(links);
 		buildPopupAfterResponse = false;
 	}
 	localStorage["HN.LastRefresh"] = (new Date()).getTime();
 }
 
-function DebugMessage(message) {
+function DebugMessage(message)
+{
   var notification = webkitNotifications.createNotification(
     "icon48.gif",
     "DEBUG",
     printTime(new Date()) + " :: " + message
   );
   notification.show();
-
 }
 
-function ShowLinkNotification(link) {
+function ShowLinkNotification(link)
+{
   var notification = webkitNotifications.createHTMLNotification("notification.html");
   notification.show();
 }
 
-function handleError() {
-  handleFeedParsingFailed('Failed to fetch RSS feed.');
-}
+function handleError() { handleFeedParsingFailed('Failed to fetch RSS feed.'); }
 
-function handleFeedParsingFailed(error) {
+function handleFeedParsingFailed(error)
+{
   //var feed = document.getElementById("feed");
   //feed.className = "error"
   //feed.innerText = "Error: " + error;
   localStorage["HN.LastRefresh"] = localStorage["HN.LastRefresh"] + retryMilliseconds;
 }
 
-function parseXml(xml) {
+function parseXml(xml)
+{
   var xmlDoc;
-  try {
+  try
+  {
     xmlDoc = new ActiveXObject('Microsoft.XMLDOM');
     xmlDoc.async = false;
     xmlDoc.loadXML(xml);
-  } catch (e) {
-    xmlDoc = (new DOMParser).parseFromString(xml, 'text/xml');
   }
+  catch (e) { xmlDoc = (new DOMParser).parseFromString(xml, 'text/xml'); }
 
   return xmlDoc;
 }
 
-function parseHNLinks(doc) {
+function parseHNLinks(doc)
+{
 	var entries = doc.getElementsByTagName('entry');
-	if (entries.length == 0) {
+	if (entries.length == 0)
+  {
 	  entries = doc.getElementsByTagName('item');
 	}
   var count = Math.min(entries.length, maxFeedItems);
   var links = new Array();
-  for (var i=0; i< count; i++) {
+  for (var i=0; i< count; i++)
+  {
     item = entries.item(i);
     var hnLink = new Object();
-    //Grab the title
+
+    // Grabs the submission's title.
     var itemTitle = item.getElementsByTagName('title')[0];
-    if (itemTitle) {
+    if (itemTitle)
+    {
       hnLink.Title = itemTitle.textContent;
-    } else {
+    }
+    else
+    {
       hnLink.Title = "Unknown Title";
     }
     
-    //Grab the Link
+    // Grabs the submissions's link.
     var itemLink = item.getElementsByTagName('link')[0];
-    if (!itemLink) {
-      itemLink = item.getElementsByTagName('comments')[0];
-    }
-    if (itemLink) {
+    if (itemLink)
+    {
       hnLink.Link = itemLink.textContent;
-    } else {
-      hnLink.Link = '';
     }
-
-    //Grab the comments link
-    var commentsLink = item.getElementsByTagName('comments')[0];
-    if (commentsLink) {
-      hnLink.CommentsLink = commentsLink.textContent;
-    } else {
-      hnLink.CommentsLink = '';
+    else
+    {
+      hnLink.Link = '';
     }
     
     links.push(hnLink);
@@ -142,41 +145,51 @@ function parseHNLinks(doc) {
   return links;
 }
 
-function SaveLinksToLocalStorage(links) {
+function SaveLinksToLocalStorage(links)
+{
 	localStorage["HN.NumLinks"] = links.length;
-	for (var i=0; i<links.length; i++) {
+	for (var i=0; i<links.length; i++)
+  {
 		localStorage["HN.Link" + i] = JSON.stringify(links[i]);
 	}
 }
 
-function RetrieveLinksFromLocalStorage() {
+function RetrieveLinksFromLocalStorage()
+{
 	var numLinks = localStorage["HN.NumLinks"];
-	if (numLinks == null) {
+	if (numLinks == null)
+  {
 		return null;
 	}
-	else {
+	else
+  {
 		var links = new Array();
-		for (var i=0; i<numLinks; i++) {
+		for (var i=0; i<numLinks; i++)
+    {
 			links.push(JSON.parse(localStorage["HN.Link" + i]))
 		}
 		return links;
 	}
 }
 
-function openOptions() {
+function openOptions()
+{
 	var optionsUrl = chrome.extension.getURL('options.html');
 	chrome.tabs.create({url: optionsUrl});
 }
 
-function openLink() {
+function openLink()
+{
   openUrl(this.href, (localStorage['HN.BackgroundTabs'] == 'false'));
 }
 
-function openLinkFront() {
+function openLinkFront()
+{
 	openUrl(this.href, true);
 }
 
-function printTime(d) {
+function printTime(d)
+{
 	var hour   = d.getHours();
   var minute = d.getMinutes();
   var ap = "AM";
@@ -193,28 +206,37 @@ function printTime(d) {
 }
 
 // Show |url| in a new tab.
-function openUrl(url, take_focus) {
+function openUrl(url, take_focus)
+{
   // Only allow http and https URLs.
-  if (url.indexOf("http:") != 0 && url.indexOf("https:") != 0) {
+  if (url.indexOf("http:") != 0 && url.indexOf("https:") != 0)
+  {
     return;
   }
   chrome.tabs.create({url: url, selected: take_focus});
 }
-	
-	function hideElement(id) {
-		var e = document.getElementById(id);
-		e.style.display = 'none';
-	}
-	
-	function showElement(id) {
-		var e = document.getElementById(id);
-    	e.style.display = 'block';
-	}
-	
-	function toggle(id) {
-     var e = document.getElementById(id);
-     if(e.style.display == 'block')
-        e.style.display = 'none';
-     else
-        e.style.display = 'block';
+
+function hideElement(id)
+{
+  var e = document.getElementById(id);
+	e.style.display = 'none';
+}
+
+function showElement(id)
+{
+  var e = document.getElementById(id);
+  e.style.display = 'block';
+}
+
+function toggle(id)
+{
+  var e = document.getElementById(id);
+  if(e.style.display == 'block')
+  {
+    e.style.display = 'none';
   }
+  else
+  {
+    e.style.display = 'block';
+  }
+}
