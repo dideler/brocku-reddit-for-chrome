@@ -4,34 +4,47 @@
 <script src="core.js"></script>
 <script src="json2.js"></script>
 <script>
-  function main() {
+  // Updates the feed with stories if none exist in storage,
+  // otherwise retrieves stories from local storage.
+  function main()
+  {
+    // Note that localStorage stores data with no time limit.
+    // This means the data will be available indefinitely.
+    // This is useful for when you temporarily lose internet access.
+    // To store data for one (browser) session, use sessionStorage instead.
 		if (localStorage['HN.NumLinks'] == null)
 		{
 			buildPopupAfterResponse = true;
 			UpdateFeed();
 		}
-		else {
+		else
+    {
 			buildPopup(RetrieveLinksFromLocalStorage());
 		}
   }
 
-	function buildPopup(links) {
+  // Populates popup.html
+	function buildPopup(links)
+  {
 	  var header = document.getElementById("header");
 	  var feed = document.getElementById("feed");
 		
+    // Sets up issue link.
     var issueLink = document.getElementById("issues");
     issueLink.addEventListener("click", openLinkFront);
 
-	  //Setup Title Link
+	  // Sets up title link.
 	  var title = document.getElementById("title");
 	  title.addEventListener("click", openLink);
 	  
-	  //Setup search button
+	  // Sets up search button.
 	  var searchButton = document.getElementById("searchbutton");
 	  searchButton.addEventListener("click", search);
 
-	  for (var i=0; i<links.length; i++) {
-	    hnLink = links[i];
+    // Constructs a table and fills it with story links.
+	  for (var i=0; i<links.length; i++)
+    {
+	    hnLink = links[i]; // FIXME: make local variable
 	    var row = document.createElement("tr");
 	    row.className = "link";
 			var num = document.createElement("td");
@@ -58,24 +71,26 @@
 		showElement("container");
 	}
 	
-	function searchOnEnter(e) {
-    if (e.keyCode == 13) {
-        search();
-    }
-	}
+  // Initiates subreddit search if enter key pressed.
+	function searchOnEnter(e) { if (e.keyCode == 13) search(); }
 	
-	function search() {
+  // Searches /r/brocku with the query entered in the searchbox.
+	function search()
+  {
     var searchBox = document.getElementById("searchbox");
     var keywords = searchBox.value;
-    if (keywords.length > 0) {
-      var search_url = "http://www.google.com/#hl=en&q=" + keywords + "+site%3Anews.ycombinator.com&fp=1&cad=b";
+    if (keywords.length > 0)
+    {
+      var search_url = "http://www.reddit.com/r/brocku/search?q=" + keywords + "&restrict_sr=on";
       openUrl(search_url, true);
     }
 	}
 	
-	function refreshLinks() {
+  // Refreshes the story links in the feed.
+	function refreshLinks()
+  {
 		var linkTable = document.getElementById("feed");
-		while(linkTable.hasChildNodes()) linkTable.removeChild(linkTable.firstChild); //Remove all current links
+		while(linkTable.hasChildNodes()) linkTable.removeChild(linkTable.firstChild); // Remove all current links.
 		toggle("container");
 		toggle("spinner");
 		buildPopupAfterResponse = true;
@@ -83,11 +98,16 @@
 		updateLastRefreshTime();
 	}
  
-	//Submit the current tab
-	function submitCurrentTab() {
-		chrome.windows.getCurrent(function(win){
-			chrome.tabs.getSelected(win.id, function(tab){
-				var submit_url = "http://news.ycombinator.com/submitlink?u=" + encodeURIComponent(tab.url) + "&t=" + encodeURIComponent(tab.title);
+	// Submit the current tab to /r/brocku.
+	function submitCurrentTab()
+  {
+		chrome.windows.getCurrent(function(win)
+    {
+			chrome.tabs.getSelected(win.id, function(tab)
+      {
+				var submit_url =
+          "http://www.reddit.com/r/brocku/submit?resubmit=true"+
+          "&url=" + encodeURIComponent(tab.url) + "&title=" + encodeURIComponent(tab.title)
 				openUrl(submit_url, true);
 			});
 		});
@@ -108,11 +128,11 @@
 			<img src="icon18.gif">
 			<a id="title" href="http://brocku.reddit.com">/r/brocku</a>
 			<span>|</span>
-			<a id="submitLink" href="javascript:submitCurrentTab()">Submit Current Page</a>
+			<a id="submitLink" href="javascript:submitCurrentTab()">Submit current page</a>
 		</div>
 		<div id="search">
       <input type="text" id="searchbox" name="searchbox" placeholder="search /r/brocku..." onkeypress="searchOnEnter(event)" />
-      <input type="submit" id="searchbutton" value="search" />
+      <input type="submit" id="searchbutton" value="Search" />
 		</div>
 		<table id="feed" cellspacing="3" cellpadding="0">
 		</table>

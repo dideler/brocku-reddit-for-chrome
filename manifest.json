@@ -13,7 +13,7 @@
 	"options_page":"options.html",
   "permissions": [
     "tabs",
-    "http://brocku.reddit.com/*",
+    "http://*/*",
     "notifications"
   ]
 }
