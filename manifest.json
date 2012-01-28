@@ -1,11 +1,11 @@
 {
-  "name": "Hacker News",
-  "version": "2.50",
-  "description": "Displays recent stories from Hacker News",
+  "name": "/r/brocku",
+  "version": "1.0",
+  "description": "Displays recent stories from the BrockU subreddit",
   "icons": { "48": "icon48.gif",
 	          "128": "icon128.gif" },
   "browser_action": {
-    "default_title": "Hacker News",
+    "default_title": "/r/brocku",
     "default_icon": "icon18.gif",
     "popup": "popup.html"
   },
@@ -13,7 +13,7 @@
 	"options_page":"options.html",
   "permissions": [
     "tabs",
-    "http://news.ycombinator.com/*",
+    "http://brocku.reddit.com/*",
     "notifications"
   ]
 }
