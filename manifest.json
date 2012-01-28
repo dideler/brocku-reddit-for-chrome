@@ -1,5 +1,5 @@
 {
-  "name": "/r/brocku",
+  "name": "BrockU reddit",
   "version": "1.0",
   "description": "Displays recent stories from the BrockU subreddit",
   "icons": { "48": "icon48.gif",

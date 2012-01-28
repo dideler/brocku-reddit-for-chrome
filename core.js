@@ -1,5 +1,5 @@
-var feedUrl = 'http://news.ycombinator.com/rss';
-var maxFeedItems = 15;
+var feedUrl = 'http://www.reddit.com/r/brocku/.rss';
+var maxFeedItems = 10;
 var req;
 var buildPopupAfterResponse = false;
 var OnFeedSuccess = null;
