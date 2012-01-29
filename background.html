@@ -15,8 +15,8 @@ function init()
     localStorage["HN.Notifications"] = false;
   }
   // If any options are not already set, they will be set to defaults here.
-  SetInitialOption("HN.RequestInterval", 1800000); // 30 min intervals
-  SetInitialOption("HN.BackgroundTabs", false);
+  setInitialOption("HN.RequestInterval", 1800000); // 30 min intervals
+  setInitialOption("HN.BackgroundTabs", false);
 
   startRequest();
 }
@@ -29,7 +29,7 @@ function startRequest()
   {
     startRequest.firstRequest = true;
   }
-  UpdateIfReady(startRequest.firstRequest);
+  updateIfReady(startRequest.firstRequest);
   startRequest.firstRequest = false;
   // Tries again in 60 seconds in case enough interval time has passed.
   window.setTimeout(startRequest, 60000);

@@ -15,11 +15,11 @@
     if (localStorage['HN.NumLinks'] == null)
     {
       buildPopupAfterResponse = true;
-      UpdateFeed();
+      updateFeed();
     }
     else
     {
-      buildPopup(RetrieveLinksFromLocalStorage());
+      buildPopup(retrieveLinksFromLocalStorage());
     }
   }
 
@@ -44,7 +44,7 @@
     // Constructs a table and fills it with story links.
     for (var i=0; i<links.length; i++)
     {
-      hnLink = links[i]; // FIXME: make local variable
+      hnLink = links[i]; // FIXME: is this declared here or in core.js?
       var row = document.createElement("tr");
       row.className = "link";
       var num = document.createElement("td");
@@ -84,12 +84,17 @@
   function refreshLinks()
   {
     var linkTable = document.getElementById("feed");
-    while(linkTable.hasChildNodes()) linkTable.removeChild(linkTable.firstChild); // Remove all current links.
+    // Remove all current links.
+    while (linkTable.hasChildNodes())
+    {
+      linkTable.removeChild(linkTable.firstChild); 
+    }
+    // TODO: place loader steps in its own function
     toggle("container");
     toggle("spinner");
     buildPopupAfterResponse = true;
-    UpdateFeed();
-    updateLastRefreshTime(); // FIXME
+    updateFeed();
+    updateLastRefreshTime();
   }
 
   // Submit the current tab to /r/brocku.

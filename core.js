@@ -1,4 +1,4 @@
-// TODO: use namespaces for global code (e.g. var rss = {}; rss.feedURL = 'http://....'; )
+// TODO: consider using namespaces for global code (e.g. var rss = {}; rss.feedURL = 'http://...'; )
 
 var feedUrl = 'http://www.reddit.com/r/brocku/.rss';
 var maxFeedItems = 10;
@@ -8,7 +8,8 @@ var OnFeedSuccess = null;
 var OnFeedFail = null;
 var retryMilliseconds = 120000;
 
-function SetInitialOption(key, value)
+// Sets the initial options by storing the key and value in local storage.
+function setInitialOption(key, value)
 {
   if (localStorage[key] == null)
   {
@@ -17,32 +18,44 @@ function SetInitialOption(key, value)
 }
 
 // Updates the feed if forced, or if it hasn't been updated before, or if it's due time.
-function UpdateIfReady(force)
+function updateIfReady(force)
 {
   var lastRefresh = parseFloat(localStorage["HN.LastRefresh"]);
-  console.log(parseFloat(localStorage["HN.LastRefresh"]));
-  console.log(localStorage["HN.LastRefresh"]);
   var interval = parseFloat(localStorage["HN.RequestInterval"]);
-	var nextRefresh = lastRefresh + interval;
-	var curTime = parseFloat((new Date()).getTime());
-	var isNull = (localStorage["HN.LastRefresh"] == null);
-  if ((force == true) || (localStorage["HN.LastRefresh"] == null) || (curTime > nextRefresh))
+  // Also update if current time > time at which next refresh should happen.
+  var refresh = parseFloat((new Date()).getTime()) > (lastRefresh + interval);
+  var noPrevRefresh = (localStorage["HN.LastRefresh"] == null);
+  if (force || noPrevRefresh || refresh)
   {
-    UpdateFeed();
+    updateFeed();
   }
 }
 
 // Updates the feed using an HTTP GET request to the subreddit's RSS feed.
-function UpdateFeed()
+function updateFeed()
 {
   req = new XMLHttpRequest();
-  req.onload = HandleRssResponse;
-  req.onerror = handleError;
+  req.onprogress = onProgress;
+  req.onload = onLoad;
+  req.onerror = onError;
   req.open("GET", feedUrl, true);
   req.send(null);
 }
 
-function HandleRssResponse()
+// Stores the most recent refresh timestamp. Called after a manual or auto refresh.
+function updateLastRefreshTime()
+{
+  localStorage["HN.LastRefresh"] = (new Date()).getTime();
+}
+
+// TODO
+function onProgress()
+{
+  //alert("loading");
+}
+
+// Handles the RSS HTTP response. Part of updating the feed.
+function onLoad()
 {
   var doc = req.responseXML;
   if (!doc)
@@ -54,24 +67,31 @@ function HandleRssResponse()
     handleFeedParsingFailed("Not a valid feed.");
     return;
   }
- 	links = parseHNLinks(doc);
- 	if (localStorage['HN.Notifications'] == 'true')
+
+  // Retrieves parsed links then saves them.
+  links = parseHNLinks(doc);
+  saveLinksToLocalStorage(links);
+ 	
+  // Notifies the user if option enabled and if there's a new frontpage submission.
+  if (localStorage['HN.Notifications'] == 'true')
   {
     if (localStorage['HN.LastNotificationTitle'] == null || localStorage['HN.LastNotificationTitle'] != links[0].Title)
     {
-      ShowLinkNotification(links[0]);
+      showLinkNotification(links[0]);
       localStorage['HN.LastNotificationTitle'] = links[0].Title;
     }
  	}
-	SaveLinksToLocalStorage(links);
-	if (buildPopupAfterResponse == true)
+
+  if (buildPopupAfterResponse == true)
   {
-		buildPopup(links);
-		buildPopupAfterResponse = false;
-	}
-	localStorage["HN.LastRefresh"] = (new Date()).getTime();
+    buildPopup(links);
+    buildPopupAfterResponse = false;
+  }
+
+  updateLastRefreshTime();
 }
 
+// TODO
 function DebugMessage(message)
 {
   var notification = webkitNotifications.createNotification(
@@ -82,14 +102,19 @@ function DebugMessage(message)
   notification.show();
 }
 
-function ShowLinkNotification(link)
+// Creates a desktop notification which links to the newest front page submission.
+function showLinkNotification(link)
 {
   var notification = webkitNotifications.createHTMLNotification("notification.html");
   notification.show();
 }
 
-function handleError() { handleFeedParsingFailed('Failed to fetch RSS feed.'); }
+function onError()
+{
+  handleFeedParsingFailed('Failed to fetch RSS feed.');
+}
 
+// Updates the last refresh timestamp.
 function handleFeedParsingFailed(error)
 {
   //var feed = document.getElementById("feed");
@@ -112,134 +137,144 @@ function parseXml(xml)
   return xmlDoc;
 }
 
+// Parses the rss links and returns a list of links.
 function parseHNLinks(doc)
 {
-	var entries = doc.getElementsByTagName('entry');
-	if (entries.length == 0)
+  var entries = doc.getElementsByTagName('entry');
+  if (entries.length == 0)
   {
-	  entries = doc.getElementsByTagName('item');
-	}
+    entries = doc.getElementsByTagName('item');
+  }
   var count = Math.min(entries.length, maxFeedItems);
-  var links = new Array();
+  var links = [];
   for (var i=0; i< count; i++)
   {
     item = entries.item(i);
-    var hnLink = new Object();
+    var link = new Object();
 
     // Grabs the submission's title.
     var itemTitle = item.getElementsByTagName('title')[0];
     if (itemTitle)
     {
-      hnLink.Title = itemTitle.textContent;
+      link.Title = itemTitle.textContent;
     }
     else
     {
-      hnLink.Title = "Unknown Title";
+      link.Title = "Unknown Title";
     }
     
     // Grabs the submissions's link.
     var itemLink = item.getElementsByTagName('link')[0];
     if (itemLink)
     {
-      hnLink.Link = itemLink.textContent;
+      link.Link = itemLink.textContent;
     }
     else
     {
-      hnLink.Link = '';
+      link.Link = '';
     }
     
-    links.push(hnLink);
+    links.push(link);
   }
   return links;
 }
 
-function SaveLinksToLocalStorage(links)
+// Stores the number of links and the links.
+function saveLinksToLocalStorage(links)
 {
 	localStorage["HN.NumLinks"] = links.length;
-	for (var i=0; i<links.length; i++)
+  for (var i=0; i<links.length; i++)
   {
-		localStorage["HN.Link" + i] = JSON.stringify(links[i]);
-	}
+    localStorage["HN.Link" + i] = JSON.stringify(links[i]);
+  }
 }
 
-function RetrieveLinksFromLocalStorage()
+// Retrieves stored links.
+function retrieveLinksFromLocalStorage()
 {
 	var numLinks = localStorage["HN.NumLinks"];
-	if (numLinks == null)
+  if (numLinks == null)
   {
-		return null;
-	}
-	else
+    return null;
+  }
+  else
   {
-		var links = new Array();
-		for (var i=0; i<numLinks; i++)
+    var links = [];
+    for (var i=0; i<numLinks; i++)
     {
-			links.push(JSON.parse(localStorage["HN.Link" + i]))
-		}
-		return links;
-	}
+      links.push(JSON.parse(localStorage["HN.Link" + i]))
+    }
+    return links;
+  }
 }
 
+// Opens the options page.
 function openOptions()
 {
-	var optionsUrl = chrome.extension.getURL('options.html');
-	chrome.tabs.create({url: optionsUrl});
+  var optionsUrl = chrome.extension.getURL('options.html');
+  chrome.tabs.create({url: optionsUrl});
 }
 
+// Opens the link in a new background tab.
 function openLink()
 {
   openUrl(this.href, (localStorage['HN.BackgroundTabs'] == 'false'));
 }
 
+// Opens the link in a new foreground tab.
 function openLinkFront()
 {
-	openUrl(this.href, true);
+  openUrl(this.href, true);
 }
 
+// Returns a string of the current time. Used in debug messages.
 function printTime(d)
 {
-	var hour   = d.getHours();
+  var hour = d.getHours();
   var minute = d.getMinutes();
-  var ap = "AM";
-  if (hour   > 11) { ap = "PM";             }
-  if (hour   > 12) { hour = hour - 12;      }
-  if (hour   == 0) { hour = 12;             }
-  if (minute < 10) { minute = "0" + minute; }
-  var timeString = hour +
-                   ':' +
-                   minute +
-                   " " +
-                   ap;
+  // Convert to 12-hour format.
+  var ap = (hour > 11) ? "PM" : "AM"; // 0-11 is AM, 12-23 is PM.
+  if (hour > 12)
+  {
+    hour -= 12;
+  }
+  if (hour == 0)
+  {
+    hour = 12;
+  }
+  if (minute < 10)
+  {
+    minute = "0" + minute;
+  }
+  var timeString = hour + ':' + minute + " " + ap;
   return timeString;
 }
 
-// Show |url| in a new tab.
+// Opens URL in a new tab in the background or foreground.
 function openUrl(url, take_focus)
 {
-  // Only allow http and https URLs.
-  if (url.indexOf("http:") != 0 && url.indexOf("https:") != 0)
+  // Only allow http and https.
+  if (url.indexOf("http:") == 0 || url.indexOf("https:") == 0)
   {
-    return;
+    chrome.tabs.create({url: url, selected: take_focus});
   }
-  chrome.tabs.create({url: url, selected: take_focus});
 }
 
 function hideElement(id)
 {
-  var e = document.getElementById(id);
-	e.style.display = 'none';
+  document.getElementById(id).style.display = 'none';
 }
 
 function showElement(id)
 {
-  var e = document.getElementById(id);
-  e.style.display = 'block';
+  document.getElementById(id).style.display = 'block';
 }
 
+// Shows or hides the element.
 function toggle(id)
 {
   var e = document.getElementById(id);
-  if(e.style.display == 'block')
+  if (e.style.display == 'block')
   {
     e.style.display = 'none';
   }
