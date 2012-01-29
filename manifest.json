@@ -13,7 +13,6 @@
   },
 	"background_page": "background.html",
 	"options_page": "options.html",
-  "homepage_url": "https://github.com/dideler/brocku-reddit-for-chrome/",
   "permissions": [
     "tabs",
     "http://*/*",
