@@ -12,64 +12,64 @@
     // This means the data will be available indefinitely.
     // This is useful for when you temporarily lose internet access.
     // To store data for one (browser) session, use sessionStorage instead.
-		if (localStorage['HN.NumLinks'] == null)
-		{
-			buildPopupAfterResponse = true;
-			UpdateFeed();
-		}
-		else
+    if (localStorage['HN.NumLinks'] == null)
     {
-			buildPopup(RetrieveLinksFromLocalStorage());
-		}
+      buildPopupAfterResponse = true;
+      UpdateFeed();
+    }
+    else
+    {
+      buildPopup(RetrieveLinksFromLocalStorage());
+    }
   }
 
   // Populates popup.html
-	function buildPopup(links)
+  function buildPopup(links)
   {
-	  var header = document.getElementById("header");
-	  var feed = document.getElementById("feed");
+    var header = document.getElementById("header");
+    var feed = document.getElementById("feed");
 		
     // Sets up issue link.
     var issueLink = document.getElementById("issues");
     issueLink.addEventListener("click", openLinkFront);
 
-	  // Sets up title link.
-	  var title = document.getElementById("title");
-	  title.addEventListener("click", openLink);
-	  
-	  // Sets up search button.
-	  var searchButton = document.getElementById("searchbutton");
-	  searchButton.addEventListener("click", search);
+    // Sets up title link.
+    var title = document.getElementById("title");
+    title.addEventListener("click", openLink);
+
+    // Sets up search button.
+    var searchButton = document.getElementById("searchbutton");
+    searchButton.addEventListener("click", search);
 
     // Constructs a table and fills it with story links.
-	  for (var i=0; i<links.length; i++)
+    for (var i=0; i<links.length; i++)
     {
-	    hnLink = links[i]; // FIXME: make local variable
-	    var row = document.createElement("tr");
-	    row.className = "link";
-			var num = document.createElement("td");
-			num.innerText = i+1;
-			var link_col = document.createElement("td")
-	    var title = document.createElement("a");
-	    title.className = "link_title";
-	    title.innerText = hnLink.Title;
-	    title.href = hnLink.Link;
-	    title.addEventListener("click", openLink);
+      hnLink = links[i]; // FIXME: make local variable
+      var row = document.createElement("tr");
+      row.className = "link";
+      var num = document.createElement("td");
+      num.innerText = i+1;
+      var link_col = document.createElement("td")
+      var title = document.createElement("a");
+      title.className = "link_title";
+      title.innerText = hnLink.Title;
+      title.href = hnLink.Link;
+      title.addEventListener("click", openLink);
 
-			link_col.appendChild(title);
-	    row.appendChild(num);
-			row.appendChild(link_col)
-	    feed.appendChild(row);
-	  }
-		hideElement("spinner");
-		showElement("container");
-	}
-	
+      link_col.appendChild(title);
+      row.appendChild(num);
+      row.appendChild(link_col)
+      feed.appendChild(row);
+    }
+    hideElement("spinner");
+    showElement("container");
+  }
+
   // Initiates subreddit search if enter key pressed.
-	function searchOnEnter(e) { if (e.keyCode == 13) search(); }
-	
+  function searchOnEnter(e) { if (e.keyCode == 13) search(); }
+
   // Searches /r/brocku with the query entered in the searchbox.
-	function search()
+  function search()
   {
     var searchBox = document.getElementById("searchbox");
     var keywords = searchBox.value;
@@ -78,63 +78,63 @@
       var search_url = "http://www.reddit.com/r/brocku/search?q=" + keywords + "&restrict_sr=on";
       openUrl(search_url, true);
     }
-	}
-	
+  }
+
   // Refreshes the story links in the feed.
-	function refreshLinks()
+  function refreshLinks()
   {
-		var linkTable = document.getElementById("feed");
-		while(linkTable.hasChildNodes()) linkTable.removeChild(linkTable.firstChild); // Remove all current links.
-		toggle("container");
-		toggle("spinner");
-		buildPopupAfterResponse = true;
-		UpdateFeed();
-		updateLastRefreshTime();
-	}
- 
-	// Submit the current tab to /r/brocku.
-	function submitCurrentTab()
+    var linkTable = document.getElementById("feed");
+    while(linkTable.hasChildNodes()) linkTable.removeChild(linkTable.firstChild); // Remove all current links.
+    toggle("container");
+    toggle("spinner");
+    buildPopupAfterResponse = true;
+    UpdateFeed();
+    updateLastRefreshTime(); // FIXME
+  }
+
+  // Submit the current tab to /r/brocku.
+  function submitCurrentTab()
   {
-		chrome.windows.getCurrent(function(win)
+    chrome.windows.getCurrent(function(win)
     {
-			chrome.tabs.getSelected(win.id, function(tab)
+      chrome.tabs.getSelected(win.id, function(tab)
       {
-				var submit_url =
+        var submit_url =
           "http://www.reddit.com/r/brocku/submit?resubmit=true"+
           "&url=" + encodeURIComponent(tab.url) + "&title=" + encodeURIComponent(tab.title)
-				openUrl(submit_url, true);
-			});
-		});
-	}
+        openUrl(submit_url, true);
+      });
+    });
+  }
 </script>
-	<link href="style.css" rel="stylesheet" type="text/css"/>
-	<style>
-	  body {overflow: hidden;}
-		#container, #spinner {width:350px;}
-	</style>
+  <link href="style.css" rel="stylesheet" type="text/css"/>
+  <style>
+    body { overflow: hidden; }
+    #container, #spinner { width: 350px; }
+  </style>
 </head>
 <body onload="main();">
-	<div id="spinner" style="display:none">
-		<img src="ajax-loader.gif">
-	</div>
-	<div id="container" class="popup-container">
-		<div id="header">
-			<img src="logo.png">
-			<a id="title" href="http://brocku.reddit.com">reddit</a>
-			<span>|</span>
-			<a id="submitLink" href="javascript:submitCurrentTab()">Submit current page</a>
-		</div>
-		<div id="search">
+  <div id="spinner" style="display:none">
+    <img src="ajax-loader.gif">
+  </div>
+  <div id="container" class="popup-container">
+    <div id="header">
+      <img src="logo.png">
+      <a id="title" href="http://brocku.reddit.com">subreddit</a>
+      <span>|</span>
+      <a id="submitLink" href="javascript:submitCurrentTab()">Submit current page</a>
+    </div>
+    <div id="search">
       <input type="text" id="searchbox" name="searchbox" placeholder="search /r/brocku..." onkeypress="searchOnEnter(event)" />
       <input type="submit" id="searchbutton" value="Search" />
-		</div>
-		<table id="feed" cellspacing="3" cellpadding="0">
-		</table>
-		<div id="footer">
-			<div class="right">
-				<a href="https://github.com/dideler/brocku-reddit-for-chrome/issues" id="issues">Issues?</a> | <a href="javascript:refreshLinks()" id="refresh">Refresh</a> | <a href="javascript:openOptions()" id="options">Options</a>
-			</div>
-		</div>
-	</div>
+    </div>
+    <table id="feed" cellspacing="3" cellpadding="0">
+    </table>
+    <div id="footer">
+      <div class="right">
+        <a href="https://github.com/dideler/brocku-reddit-for-chrome/issues" id="issues">Issues?</a> | <a href="javascript:refreshLinks()" id="refresh">Refresh</a> | <a href="javascript:openOptions()" id="options">Options</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

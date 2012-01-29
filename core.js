@@ -1,3 +1,5 @@
+// TODO: use namespaces for global code (e.g. var rss = {}; rss.feedURL = 'http://....'; )
+
 var feedUrl = 'http://www.reddit.com/r/brocku/.rss';
 var maxFeedItems = 10;
 var req;
@@ -8,23 +10,29 @@ var retryMilliseconds = 120000;
 
 function SetInitialOption(key, value)
 {
-  if (localStorage[key] == null) localStorage[key] = value;
+  if (localStorage[key] == null)
+  {
+    localStorage[key] = value;
+  }
 }
 
+// Updates the feed if forced, or if it hasn't been updated before, or if it's due time.
 function UpdateIfReady(force)
 {
   var lastRefresh = parseFloat(localStorage["HN.LastRefresh"]);
+  console.log(parseFloat(localStorage["HN.LastRefresh"]));
+  console.log(localStorage["HN.LastRefresh"]);
   var interval = parseFloat(localStorage["HN.RequestInterval"]);
 	var nextRefresh = lastRefresh + interval;
 	var curTime = parseFloat((new Date()).getTime());
-	var isReady = (curTime > nextRefresh);
 	var isNull = (localStorage["HN.LastRefresh"] == null);
-  if ((force == true) || (localStorage["HN.LastRefresh"] == null) || (isReady))
+  if ((force == true) || (localStorage["HN.LastRefresh"] == null) || (curTime > nextRefresh))
   {
     UpdateFeed();
   }
 }
 
+// Updates the feed using an HTTP GET request to the subreddit's RSS feed.
 function UpdateFeed()
 {
   req = new XMLHttpRequest();

@@ -16,6 +16,5 @@ This is one out of two projects I worked on during the [St. Catharines 2012 Hack
 * [Adam Albrecht](http://www.adamalbrecht.com) for providing an awesome foundation I could build upon.
 * [Collin Price](https://github.com/collinprice) & Ron Bond for keeping me company while hacking on their own project.
 * Collin's mom for bringing us food and [a kick-ass cake](https://twitter.com/#!/dideler/status/163405500308914177/photo/1).
-* [Katherine Bowler](https://github.com/Katbow) for bringing supplies to keep me energized.
 * [reddit](https://github.com/reddit/reddit-companion) for your open source code (I used the alien logo) and for being awesome.
 * And everyone else who stopped by during the hackathon!
