@@ -6,9 +6,10 @@
 <head>
 <link href="style.css" rel="stylesheet" type="text/css"/>
 <style>
- #StoryLink {font-size:14px;}
- #header { margin-bottom:8px;}
- #header span {font-size:14px; font-weight:bold;}
+ #StoryLink { font-size: 14px; color: darkGoldenrod; }
+ #header { margin-bottom: 8px; }
+ #header span { font-size: 14px; font-weight: bold; }
+ #logo { margin: 4px 0px 0px 0px !important; }
 </style>
 <script src="core.js"></script>
 <script src="json2.js"></script>
@@ -24,11 +25,9 @@
 </script>
 <body onLoad="SetupNotification()">
   <div id="header">
-    <img src="icon18.gif"/>
-    <span>/r/brocku Top Story</span> <!-- TODO: change top story to new submission -->
+    <img id="logo" src="reddit.png"/>
+    <span>New submission on /r/brocku</span>
   </div>
-  <div id="story">
-  <a id="StoryLink" />
-  </div>
+  <div id="story"><a id="StoryLink" /></div>
 </body>
 </html>

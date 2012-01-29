@@ -3,17 +3,18 @@
 <head>
 <link href="style.css" rel="stylesheet" type="text/css"/>
 <style>
- #header span {font-size:14px; font-weight:bold;}
- #options { text-decoration:underline; color:#00C; }
- p {margin-top:8px;}
+ #header span { font-size: 14px; font-weight: bold; }
+ #options { text-decoration: underline; color: darkGoldenrod; }
+ #logo { margin: 4px 0px 0px 0px !important; }
+ p { margin-top: 8px; color: white; }
 </style>
 <script src="core.js"></script>
 <script src="json2.js"></script>
 <body>
   <div id="header">
-    <img src="icon18.gif"/>
+    <img id="logo" src="reddit.png"/>
     <span>/r/brocku notifications</span>
   </div>
-	<p>If you want to see notifications like this every time a new story is submitted on /r/brocku, <a href='javascript:openOptions()' id="options">click here to go to the options page.</a></p> <!--TODO: currently notifies when new story reaches #1, change to new story submitted -->
+	<p>If you want to see notifications like this every time a new story is submitted on /r/brocku, <a href='javascript:openOptions()' id="options">go to the options page.</a></p> <!--TODO: currently notifies when new story reaches #1, change to new story submitted -->
 </body>
 </html>

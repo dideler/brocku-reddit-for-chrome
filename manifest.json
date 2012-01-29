@@ -2,15 +2,18 @@
   "name": "BrockU reddit",
   "version": "1.0",
   "description": "Displays recent stories from the BrockU subreddit",
-  "icons": { "48": "icon48.gif",
-	          "128": "icon128.gif" },
+  "icons": {
+    "48": "icon48.png",
+	  "128": "icon128.png"
+  },
   "browser_action": {
     "default_title": "/r/brocku",
-    "default_icon": "icon18.gif",
+    "default_icon": "reddit.png",
     "popup": "popup.html"
   },
-	"background_page":"background.html",
-	"options_page":"options.html",
+	"background_page": "background.html",
+	"options_page": "options.html",
+  "homepage_url": "https://github.com/dideler/brocku-reddit-for-chrome/",
   "permissions": [
     "tabs",
     "http://*/*",
