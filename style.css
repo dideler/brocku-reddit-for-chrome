@@ -1,5 +1,5 @@
 body { font-family: verdana, helvetica, arial, sans-serif; font-size: 10pt; background: #C00; }
-a { text-decoration: none; color: blue; } /* #000 */
+a { text-decoration: none; color: blue; }
 a:hover { text-decoration: underline; }
 #container, #spinner { background: white;}
 #header { height: 30px; background: #C00; color: #222; }
@@ -7,7 +7,7 @@ a:hover { text-decoration: underline; }
 #header a, #header span, #header h1 { color: white; float: left; margin: 5px 2px 0 5px; }
 #title, a#title { font-weight: bold; font-size: 14px; margin-top: 5px; }
 #feed { min-width: auto; margin: 5px; font-size: 9pt; padding-bottom: 2px; }
-#feed table, #feed a:visited, #feed td:nth-child(1), #searchbox { color: #551A8B; } /*#828282; }*/
+#feed table, #feed a:visited, #feed td:nth-child(1), #searchbox { color: #551A8B; }
 #feed td { vertical-align:top; }
 .link { padding: 2px 0px; }
 .link span { margin-right: 3px;}
