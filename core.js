@@ -80,7 +80,7 @@ function onLoad()
       showLinkNotification(links[0]);
       localStorage['HN.LastNotificationTitle'] = links[0].Title;
     }
- 	}
+  }
 
   if (buildPopupAfterResponse == true)
   {
@@ -182,7 +182,7 @@ function parseHNLinks(doc)
 // Stores the number of links and the links.
 function saveLinksToLocalStorage(links)
 {
-	localStorage["HN.NumLinks"] = links.length;
+  localStorage["HN.NumLinks"] = links.length;
   for (var i=0; i<links.length; i++)
   {
     localStorage["HN.Link" + i] = JSON.stringify(links[i]);
@@ -192,7 +192,7 @@ function saveLinksToLocalStorage(links)
 // Retrieves stored links.
 function retrieveLinksFromLocalStorage()
 {
-	var numLinks = localStorage["HN.NumLinks"];
+  var numLinks = localStorage["HN.NumLinks"];
   if (numLinks == null)
   {
     return null;
