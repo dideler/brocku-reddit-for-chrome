@@ -14,6 +14,7 @@
     // To store data for one (browser) session, use sessionStorage instead.
     if (localStorage['HN.NumLinks'] == null)
     {
+      showLoading();
       buildPopupAfterResponse = true;
       updateFeed();
     }
@@ -44,7 +45,7 @@
     // Constructs a table and fills it with story links.
     for (var i=0; i<links.length; i++)
     {
-      hnLink = links[i]; // FIXME: is this declared here or in core.js?
+      var link = links[i]; // FIXME: if broken, remove 'var'
       var row = document.createElement("tr");
       row.className = "link";
       var num = document.createElement("td");
@@ -52,8 +53,8 @@
       var link_col = document.createElement("td")
       var title = document.createElement("a");
       title.className = "link_title";
-      title.innerText = hnLink.Title;
-      title.href = hnLink.Link;
+      title.innerText = link.Title;
+      title.href = link.Link;
       title.addEventListener("click", openLink);
 
       link_col.appendChild(title);
@@ -84,14 +85,14 @@
   function refreshLinks()
   {
     var linkTable = document.getElementById("feed");
+    
     // Remove all current links.
     while (linkTable.hasChildNodes())
     {
       linkTable.removeChild(linkTable.firstChild); 
     }
-    // TODO: place loader steps in its own function
-    toggle("container");
-    toggle("spinner");
+
+    showLoading();
     buildPopupAfterResponse = true;
     updateFeed();
     updateLastRefreshTime();

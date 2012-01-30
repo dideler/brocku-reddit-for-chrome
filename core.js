@@ -35,7 +35,6 @@ function updateIfReady(force)
 function updateFeed()
 {
   req = new XMLHttpRequest();
-  req.onprogress = onProgress;
   req.onload = onLoad;
   req.onerror = onError;
   req.open("GET", feedUrl, true);
@@ -48,10 +47,11 @@ function updateLastRefreshTime()
   localStorage["HN.LastRefresh"] = (new Date()).getTime();
 }
 
-// TODO
-function onProgress()
+// Displays the loader animation.
+function showLoading()
 {
-  //alert("loading");
+  toggle("container");
+  toggle("spinner");
 }
 
 // Handles the RSS HTTP response. Part of updating the feed.
@@ -91,8 +91,8 @@ function onLoad()
   updateLastRefreshTime();
 }
 
-// TODO
-function DebugMessage(message)
+// Prints a debug message along with the time. (not being used at the moment)
+function debugMessage(message)
 {
   var notification = webkitNotifications.createNotification(
     "icon48.png",

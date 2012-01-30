@@ -10,7 +10,7 @@ This is one out of two projects I worked on during the [St. Catharines 2012 Hack
 * Login / Logout
 * Upvote / Downvote
 * Configurable # of stories to show
-* Ability to show the newest stories instead of the most popular
+* Thumbnails
 
 ### Thank You
 * [Adam Albrecht](http://www.adamalbrecht.com) for providing an awesome foundation I could build upon.
