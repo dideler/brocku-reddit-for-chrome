@@ -163,8 +163,8 @@ function parseHNLinks(doc)
   var links = [];
   for (var i = 0; i < count; i++)
   {
-    item = entries.item(i);
-    var link = new Object();
+    var item = entries.item(i);
+    var link = {};
 
     // Grabs the submission's title.
     var itemTitle = item.getElementsByTagName('title')[0];
