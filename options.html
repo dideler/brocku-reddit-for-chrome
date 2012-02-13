@@ -19,7 +19,7 @@
     function restoreOptions()
     {
       initVariables();
-      var reqInterval = localStorage["HN.RequestInterval"];
+      var reqInterval = localStorage["requestInterval"];
       for (var i=0; i<selectReqInterval.children.length; i++)
       {
         if (selectReqInterval[i].value == reqInterval)
@@ -28,7 +28,7 @@
           break;
         }
       }
-      var notifications = localStorage["HN.Notifications"];
+      var notifications = localStorage["notifications"];
       for (var i=0; i<radioNotifications.length; i++)
       {
         if (radioNotifications[i].value == notifications)
@@ -36,7 +36,7 @@
           radioNotifications[i].checked = "true";
         }
       }
-      var backgroundTabs = localStorage["HN.BackgroundTabs"];
+      var backgroundTabs = localStorage["backgroundTabs"];
       for (var i=0; i<radioBackgroundTabs.length; i++)
       {
         if (radioBackgroundTabs[i].value == backgroundTabs)
@@ -50,14 +50,14 @@
     function saveOptions()
     {
       var interval = selectReqInterval.children[selectReqInterval.selectedIndex].value;
-      localStorage["HN.RequestInterval"] = interval;
+      localStorage["requestInterval"] = interval;
       
       // Saves the first checked (notification) radio button it comes across.
       for (var i=0; i<radioNotifications.length; i++)
       {
         if (radioNotifications[i].checked == true)
         {
-          localStorage["HN.Notifications"] = radioNotifications[i].value;
+          localStorage["notifications"] = radioNotifications[i].value;
           break;
         }
       }
@@ -66,7 +66,7 @@
       {
         if (radioBackgroundTabs[i].checked == true)
         {
-          localStorage["HN.BackgroundTabs"] = radioBackgroundTabs[i].value;
+          localStorage["backgroundTabs"] = radioBackgroundTabs[i].value;
           break;
         }
       }

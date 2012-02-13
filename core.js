@@ -20,11 +20,11 @@ function setInitialOption(key, value)
 // Updates the feed if forced, or if it hasn't been updated before, or if it's due time.
 function updateIfReady(force)
 {
-  var lastRefresh = parseFloat(localStorage["HN.LastRefresh"]);
-  var interval = parseFloat(localStorage["HN.RequestInterval"]);
+  var lastRefresh = parseFloat(localStorage["lastRefresh"]);
+  var interval = parseFloat(localStorage["requestInterval"]);
   // Also update if current time > time at which next refresh should happen.
   var refresh = parseFloat((new Date()).getTime()) > (lastRefresh + interval);
-  var noPrevRefresh = (localStorage["HN.LastRefresh"] == null);
+  var noPrevRefresh = (localStorage["lastRefresh"] == null);
   if (force || noPrevRefresh || refresh)
   {
     updateFeed();
@@ -44,7 +44,7 @@ function updateFeed()
 // Stores the most recent refresh timestamp. Called after a manual or auto refresh.
 function updateLastRefreshTime()
 {
-  localStorage["HN.LastRefresh"] = (new Date()).getTime();
+  localStorage["lastRefresh"] = (new Date()).getTime();
 }
 
 // Displays the loader animation.
@@ -69,30 +69,33 @@ function onLoad()
   }
 
   // Retrieves parsed links then saves them.
-  var links = parseHNLinks(doc);
+  var links = parseLinks(doc);
   saveLinksToLocalStorage(links);
  	
   // Notifies the user of any new frontpage submission if notification option enabled.
-  if (localStorage['HN.Notifications'] == 'true')
+  if (localStorage['notifications'] == 'true')
   {
     // Checks if the last notification story still exists in the new list of stories.
-    var newStory = false;
-    var lastStory = localStorage['HN.LastNotificationTitle'];
-    for (var i = 1; i < links.length; i++) // Start the search from the 2nd top story.
+    var lastStory = localStorage['lastNotificationTitle'];
+    if (lastStory)
     {
-      // If the last top story is no longer in the list, it was downvoted, deleted, or removed.
-      // Which means the current top story is not a new submission, and should not receive a notificaion.
-      if (lastStory == links[i].Title) 
+      var newStory = false;
+      for (var i = 1; i < links.length; i++) // Start the search from the 2nd top story.
       {
-        newStory = true;
-        break;
+        // If the last top story is no longer in the list, it was downvoted, deleted, or removed.
+        // Which means the current top story is not a new submission, and should not receive a notificaion.
+        if (lastStory == links[i].Title) 
+        {
+          newStory = true;
+          break;
+        }
       }
     }
 
-    if (!localStorage['HN.LastNotificationTitle'] || newStory)
+    if (!lastStory || newStory)
     {
       showLinkNotification(links[0]);
-      localStorage['HN.LastNotificationTitle'] = links[0].Title;
+      localStorage['lastNotificationTitle'] = links[0].Title;
     }
   }
 
@@ -134,7 +137,7 @@ function handleFeedParsingFailed(error)
   //var feed = document.getElementById("feed");
   //feed.className = "error"
   //feed.innerText = "Error: " + error;
-  localStorage["HN.LastRefresh"] = localStorage["HN.LastRefresh"] + retryMilliseconds;
+  localStorage["lastRefresh"] = localStorage["lastRefresh"] + retryMilliseconds;
 }
 
 function parseXml(xml)
@@ -152,7 +155,7 @@ function parseXml(xml)
 }
 
 // Parses the rss links and returns a list of links.
-function parseHNLinks(doc)
+function parseLinks(doc)
 {
   var entries = doc.getElementsByTagName('entry');
   if (entries.length == 0)
@@ -196,17 +199,17 @@ function parseHNLinks(doc)
 // Stores the number of links and the links.
 function saveLinksToLocalStorage(links)
 {
-  localStorage["HN.NumLinks"] = links.length;
+  localStorage["numLinks"] = links.length;
   for (var i = 0; i < links.length; i++)
   {
-    localStorage["HN.Link" + i] = JSON.stringify(links[i]);
+    localStorage["link." + i] = JSON.stringify(links[i]);
   }
 }
 
 // Retrieves stored links.
 function retrieveLinksFromLocalStorage()
 {
-  var numLinks = localStorage["HN.NumLinks"];
+  var numLinks = localStorage["numLinks"];
   if (!numLinks)
   {
     return null;
@@ -216,7 +219,7 @@ function retrieveLinksFromLocalStorage()
     var links = [];
     for (var i = 0; i < numLinks; i++)
     {
-      links.push(JSON.parse(localStorage["HN.Link" + i]))
+      links.push(JSON.parse(localStorage["link." + i]))
     }
     return links;
   }
@@ -232,7 +235,7 @@ function openOptions()
 // Opens the link in a new background tab.
 function openLink()
 {
-  openUrl(this.href, (localStorage['HN.BackgroundTabs'] == 'false'));
+  openUrl(this.href, (localStorage['backgroundTabs'] == 'false'));
 }
 
 // Opens the link in a new foreground tab.
