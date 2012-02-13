@@ -1,4 +1,4 @@
-## Brock University Subreddit Chrome Extension  
+## [Brock University Subreddit Chrome Extension](https://chrome.google.com/webstore/detail/nolkcagjanpkfmpjnljlkmdlificaapk)
 
 This is an extension for Google Chrome that displays the latest links from the
 Brock University subreddit, [/r/brocku](http://brocku.reddit.com).
