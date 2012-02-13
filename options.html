@@ -71,6 +71,23 @@
         }
       }
     }
+
+    // Clears temporary storage (everything except settings).
+    function clearTempStorage()
+    {
+      var backgroundTabs = localStorage["backgroundTabs"];
+      var notifications = localStorage["notifications"];
+      var requestInterval = localStorage["requestInterval"];
+
+      localStorage.clear();
+      
+      localStorage["backgroundTabs"] = backgroundTabs;
+      localStorage["notifications"] = notifications;
+      localStorage["requestInterval"] = requestInterval;
+      
+      restoreOptions();
+      //refreshLinks();
+    }
   </script>
   <link href="style.css" rel="stylesheet" type="text/css"/>
   <style>
@@ -106,6 +123,8 @@
       <input type="radio" name="BackgroundTabs" value="true" onChange="saveOptions()"> Yes
       <input type="radio" class="second-radio" name="BackgroundTabs" value="false" onChange="saveOptions()"> No<br/>
       <br/><br/>
+      <label for="TempStorage">Clear extension's temporary storage?</label><br/>
+      <input type="button" name="TempStorage" value="Clear" onClick="clearTempStorage()"><br/><br/>
       <p>:: Created by <b>Dennis Ideler</b> :: <a href='http://dennisideler.com' target='_blank'>www.dennisideler.com</a><p>
       <p class='right'>
         <a href='https://github.com/dideler/brocku-reddit-for-chrome/issues' target='_blank'>Report an Issue</a>
