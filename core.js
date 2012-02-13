@@ -11,7 +11,7 @@ var retryMilliseconds = 120000;
 // Sets the initial options by storing the key and value in local storage.
 function setInitialOption(key, value)
 {
-  if (localStorage[key] == null)
+  if (!localStorage[key]) // Note: null is false in boolean expressions (http://goo.gl/Kp50L)
   {
     localStorage[key] = value;
   }
@@ -69,20 +69,34 @@ function onLoad()
   }
 
   // Retrieves parsed links then saves them.
-  links = parseHNLinks(doc);
+  var links = parseHNLinks(doc);
   saveLinksToLocalStorage(links);
  	
-  // Notifies the user if option enabled and if there's a new frontpage submission.
+  // Notifies the user of any new frontpage submission if notification option enabled.
   if (localStorage['HN.Notifications'] == 'true')
   {
-    if (localStorage['HN.LastNotificationTitle'] == null || localStorage['HN.LastNotificationTitle'] != links[0].Title)
+    // Checks if the last notification story still exists in the new list of stories.
+    var newStory = false;
+    var lastStory = localStorage['HN.LastNotificationTitle'];
+    for (var i = 1; i < links.length; i++) // Start the search from the 2nd top story.
+    {
+      // If the last top story is no longer in the list, it was downvoted, deleted, or removed.
+      // Which means the current top story is not a new submission, and should not receive a notificaion.
+      if (lastStory == links[i].Title) 
+      {
+        newStory = true;
+        break;
+      }
+    }
+
+    if (!localStorage['HN.LastNotificationTitle'] || newStory)
     {
       showLinkNotification(links[0]);
       localStorage['HN.LastNotificationTitle'] = links[0].Title;
     }
   }
 
-  if (buildPopupAfterResponse == true)
+  if (buildPopupAfterResponse)
   {
     buildPopup(links);
     buildPopupAfterResponse = false;
@@ -91,7 +105,7 @@ function onLoad()
   updateLastRefreshTime();
 }
 
-// Prints a debug message along with the time. (not being used at the moment)
+// Prints a debug message along with the time. (Not being used at the moment)
 function debugMessage(message)
 {
   var notification = webkitNotifications.createNotification(
@@ -147,7 +161,7 @@ function parseHNLinks(doc)
   }
   var count = Math.min(entries.length, maxFeedItems);
   var links = [];
-  for (var i=0; i< count; i++)
+  for (var i = 0; i < count; i++)
   {
     item = entries.item(i);
     var link = new Object();
@@ -183,7 +197,7 @@ function parseHNLinks(doc)
 function saveLinksToLocalStorage(links)
 {
   localStorage["HN.NumLinks"] = links.length;
-  for (var i=0; i<links.length; i++)
+  for (var i = 0; i < links.length; i++)
   {
     localStorage["HN.Link" + i] = JSON.stringify(links[i]);
   }
@@ -193,14 +207,14 @@ function saveLinksToLocalStorage(links)
 function retrieveLinksFromLocalStorage()
 {
   var numLinks = localStorage["HN.NumLinks"];
-  if (numLinks == null)
+  if (!numLinks)
   {
     return null;
   }
   else
   {
     var links = [];
-    for (var i=0; i<numLinks; i++)
+    for (var i = 0; i < numLinks; i++)
     {
       links.push(JSON.parse(localStorage["HN.Link" + i]))
     }
