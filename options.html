@@ -20,7 +20,7 @@
     {
       initVariables();
       var reqInterval = localStorage["requestInterval"];
-      for (var i=0; i<selectReqInterval.children.length; i++)
+      for (var i = 0; i < selectReqInterval.children.length; i++)
       {
         if (selectReqInterval[i].value == reqInterval)
         {
@@ -29,7 +29,7 @@
         }
       }
       var notifications = localStorage["notifications"];
-      for (var i=0; i<radioNotifications.length; i++)
+      for (var i = 0; i < radioNotifications.length; i++)
       {
         if (radioNotifications[i].value == notifications)
         {
@@ -37,7 +37,7 @@
         }
       }
       var backgroundTabs = localStorage["backgroundTabs"];
-      for (var i=0; i<radioBackgroundTabs.length; i++)
+      for (var i = 0; i < radioBackgroundTabs.length; i++)
       {
         if (radioBackgroundTabs[i].value == backgroundTabs)
         {
@@ -53,7 +53,7 @@
       localStorage["requestInterval"] = interval;
       
       // Saves the first checked (notification) radio button it comes across.
-      for (var i=0; i<radioNotifications.length; i++)
+      for (var i = 0; i < radioNotifications.length; i++)
       {
         if (radioNotifications[i].checked == true)
         {
@@ -62,7 +62,7 @@
         }
       }
 
-      for (var i=0; i<radioBackgroundTabs.length; i++)
+      for (var i = 0; i < radioBackgroundTabs.length; i++)
       {
         if (radioBackgroundTabs[i].checked == true)
         {
