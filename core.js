@@ -138,7 +138,7 @@ function handleFeedParsingFailed(error)
   //var feed = document.getElementById("feed");
   //feed.className = "error"
   //feed.innerText = "Error: " + error;
-  localStorage["lastRefresh"] = localStorage["lastRefresh"] + retryMilliseconds;
+  localStorage["lastRefresh"] = parseFloat(localStorage["lastRefresh"]) + retryMilliseconds;
 }
 
 function parseXml(xml)
