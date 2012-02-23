@@ -6,7 +6,7 @@ var req;
 var buildPopupAfterResponse = false;
 var OnFeedSuccess = null;
 var OnFeedFail = null;
-var retryMilliseconds = 120000;
+var retryMilliseconds = 120000; // 2 minutes
 
 // Sets the initial options by storing the key and value in local storage.
 function setInitialOption(key, value)
@@ -22,10 +22,11 @@ function updateIfReady(force)
 {
   var lastRefresh = parseFloat(localStorage["lastRefresh"]);
   var interval = parseFloat(localStorage["requestInterval"]);
-  // Also update if current time > time at which next refresh should happen.
-  var refresh = parseFloat((new Date()).getTime()) > (lastRefresh + interval);
+  var timestamp = +new Date; // Can also use 'Number(new Date())' or 'new Date().getTime()'
+  var nextUpdate = lastRefresh + interval;
+  var refresh = timestamp > nextUpdate;
   var noPrevRefresh = (localStorage["lastRefresh"] == null);
-  if (force || noPrevRefresh || refresh)
+  if (refresh || force || noPrevRefresh)
   {
     updateFeed();
   }
@@ -44,7 +45,7 @@ function updateFeed()
 // Stores the most recent refresh timestamp. Called after a manual or auto refresh.
 function updateLastRefreshTime()
 {
-  localStorage["lastRefresh"] = (new Date()).getTime();
+  localStorage["lastRefresh"] = +new Date();
 }
 
 // Displays the loader animation.
