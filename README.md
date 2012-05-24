@@ -1,4 +1,4 @@
-## [Brock University Subreddit Chrome Extension](https://chrome.google.com/webstore/detail/nolkcagjanpkfmpjnljlkmdlificaapk)
+# [Brock University Reddit Chrome Extension ![icon1](https://github.com/dideler/brocku-reddit-for-chrome/raw/master/icon128.png) ![icon2](https://github.com/dideler/brocku-reddit-for-chrome/raw/master/images/webstore-icon-128x128.png)  ](https://chrome.google.com/webstore/detail/nolkcagjanpkfmpjnljlkmdlificaapk)
 
 This is an extension for Google Chrome that displays the latest links from the
 Brock University subreddit, [/r/brocku](http://brocku.reddit.com).
@@ -6,11 +6,7 @@ You can also search, make a submission of the current page, and receive desktop 
 
 This is one out of two projects I worked on during the [St. Catharines 2012 Hackathon](https://www.facebook.com/events/216867181733366).
 
-#### Possible Future Updates:
-* Login / Logout
-* Upvote / Downvote
-* Configurable # of stories to show
-* Thumbnails
+![screenshot](https://github.com/dideler/brocku-reddit-for-chrome/raw/master/images/screenshot.png)
 
 ### Thank You
 * [Adam Albrecht](http://www.adamalbrecht.com) for providing an awesome foundation I could build upon.
