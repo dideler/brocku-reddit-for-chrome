@@ -13,11 +13,16 @@ function startRequest() {
 
 // If no record of previous usage exists, notify user about notifications.
 if (localStorage['notifications'] == null) {
-  var notification = webkitNotifications.createHTMLNotification(
-    'initialNotification.html'
-  );
-  notification.show();
-  localStorage['notifications'] = false;
+  chrome.notifications.create('initial-notification', {
+    type: 'basic',
+    iconUrl: 'images/webstore-icon-128x128.png',
+    title: 'Be the early badger',
+    message: 'Post notifications can be disabled in extension options',
+    requireInteraction: true,
+    silent: false,
+  });
+
+  localStorage['notifications'] = true;
 }
 
 // Set default options if not already set.
