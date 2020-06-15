@@ -16,8 +16,8 @@ if (localStorage['notifications'] == null) {
   chrome.notifications.create('initial-notification', {
     type: 'basic',
     iconUrl: 'images/webstore-icon-128x128.png',
-    title: 'Be the early badger',
-    message: 'Post notifications can be disabled in extension options',
+    title: '/r/brocku post notifications',
+    message: 'Notifications can be disabled in the extension options',
     requireInteraction: true,
     silent: false,
   });
