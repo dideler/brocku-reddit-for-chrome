@@ -112,8 +112,14 @@ function onLoad()
 // Creates a Chrome notification which links to the newest front page submission.
 function showLinkNotification(link)
 {
-  var notification = webkitNotifications.createHTMLNotification("notification.html");
-  notification.show();
+  chrome.notifications.create('new-post-notification', {
+    type: 'basic',
+    iconUrl: 'images/webstore-icon-128x128.png',
+    title: 'New post on /r/brocku',
+    message: link.Title,
+    requireInteraction: false,
+    silent: true,
+  });
 }
 
 function onError()

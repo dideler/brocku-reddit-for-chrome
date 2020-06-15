@@ -33,6 +33,14 @@ chrome.notifications.onButtonClicked.addListener(function(notificationId, button
   }
 });
 
+// Setup event handler for when a new post notification is clicked.
+chrome.notifications.onClicked.addListener(function(notificationId) {
+  if (notificationId == 'new-post-notification') {
+    var url = JSON.parse(localStorage['link.0']).Link;
+    chrome.tabs.create({url: url});
+  }
+});
+
 // Set default options if not already set.
 setInitialOption('requestInterval', 1800000); // 30 min intervals
 setInitialOption('backgroundTabs', false);
