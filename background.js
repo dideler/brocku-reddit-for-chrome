@@ -11,20 +11,20 @@ function startRequest() {
   window.setTimeout(startRequest, 60000);
 }
 
-// If no record of previous usage exists, notify user about notifications.
-if (localStorage['notifications'] == null) {
-  chrome.notifications.create('initial-notification', {
-    type: 'basic',
-    iconUrl: 'images/webstore-icon-128x128.png',
-    title: '/r/brocku post notifications',
-    message: 'Notifications can be disabled in the extension options',
-    requireInteraction: true,
-    silent: false,
-    buttons: [ { title: 'Options' } ]
-  });
-
-  localStorage['notifications'] = true;
-}
+// Show a notification on first install.
+chrome.runtime.onInstalled.addListener(function(details) {
+  if (details.reason == "install") {
+    chrome.notifications.create('initial-notification', {
+      type: 'basic',
+      iconUrl: 'images/webstore-icon-128x128.png',
+      title: '/r/brocku post notifications',
+      message: 'Notifications can be disabled in the extension options',
+      requireInteraction: true,
+      silent: false,
+      buttons: [ { title: 'Options' } ]
+    });
+  }
+});
 
 // Setup event handler for 'Options' button on post-install notification.
 chrome.notifications.onButtonClicked.addListener(function(notificationId, buttonIndex) {
@@ -36,5 +36,6 @@ chrome.notifications.onButtonClicked.addListener(function(notificationId, button
 // Set default options if not already set.
 setInitialOption('requestInterval', 1800000); // 30 min intervals
 setInitialOption('backgroundTabs', false);
+setInitialOption('notifications', true);
 
 startRequest();
