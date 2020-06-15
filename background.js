@@ -20,10 +20,18 @@ if (localStorage['notifications'] == null) {
     message: 'Notifications can be disabled in the extension options',
     requireInteraction: true,
     silent: false,
+    buttons: [ { title: 'Options' } ]
   });
 
   localStorage['notifications'] = true;
 }
+
+// Setup event handler for 'Options' button on post-install notification.
+chrome.notifications.onButtonClicked.addListener(function(notificationId, buttonIndex) {
+  if (notificationId == 'initial-notification' && buttonIndex == 0) {
+    chrome.runtime.openOptionsPage();
+  }
+});
 
 // Set default options if not already set.
 setInitialOption('requestInterval', 1800000); // 30 min intervals
