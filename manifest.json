@@ -10,7 +10,7 @@
   "browser_action": {
     "default_title": "/r/brocku",
     "default_icon": "reddit.png",
-    "popup": "popup.html"
+    "default_popup": "popup.html"
   },
   "background": {
     "page": "background.html"
