@@ -1,6 +1,6 @@
 // TODO: consider using namespaces for global code (e.g. var rss = {}; rss.feedURL = 'http://...'; )
 
-var feedUrl = 'http://www.reddit.com/r/brocku/.rss';
+var feedUrl = 'https://www.reddit.com/r/brocku/.rss';
 var maxFeedItems = 10;
 var req;
 var buildPopupAfterResponse = false;
