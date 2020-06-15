@@ -109,18 +109,7 @@ function onLoad()
   updateLastRefreshTime();
 }
 
-// Prints a debug message along with the time. (Not being used at the moment)
-function debugMessage(message)
-{
-  var notification = webkitNotifications.createNotification(
-    "icon48.png",
-    "DEBUG",
-    printTime(new Date()) + " :: " + message
-  );
-  notification.show();
-}
-
-// Creates a desktop notification which links to the newest front page submission.
+// Creates a Chrome notification which links to the newest front page submission.
 function showLinkNotification(link)
 {
   var notification = webkitNotifications.createHTMLNotification("notification.html");
