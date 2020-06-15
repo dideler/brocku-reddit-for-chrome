@@ -180,7 +180,7 @@ function parseLinks(doc)
     var itemLink = item.getElementsByTagName('link')[0];
     if (itemLink)
     {
-      link.Link = itemLink.textContent;
+      link.Link = itemLink.getAttribute("href");
     }
     else
     {
