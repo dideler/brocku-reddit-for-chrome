@@ -4,12 +4,20 @@ window.onload = () => {
 };
 
 function setupEvents() {
-  document.getElementById("submitLink").addEventListener('click', submitCurrentTab, false);
-  document.getElementById("refresh").addEventListener('click', refreshLinks, false);
-  document.getElementById("options").addEventListener('click', openOptions, false);
-  document.getElementById("searchbox").addEventListener('keydown', function(event) {
-    searchOnEnter(event);
-  });
+  document
+    .getElementById('submitLink')
+    .addEventListener('click', submitCurrentTab, false);
+  document
+    .getElementById('refresh')
+    .addEventListener('click', refreshLinks, false);
+  document
+    .getElementById('options')
+    .addEventListener('click', openOptions, false);
+  document
+    .getElementById('searchbox')
+    .addEventListener('keydown', function (event) {
+      searchOnEnter(event);
+    });
 }
 
 // Updates the feed with submissions if none exist in storage,
@@ -51,7 +59,7 @@ function buildPopup(links) {
     var row = document.createElement('tr');
     row.className = 'link';
     var num = document.createElement('td');
-    num.innerText = String(i + 1).padStart(2, '0') + ".";
+    num.innerText = String(i + 1).padStart(2, '0') + '.';
     var link_col = document.createElement('td');
     var title = document.createElement('a');
     title.className = 'link_title';
@@ -79,7 +87,8 @@ function search() {
   var searchBox = document.getElementById('searchbox');
   var keywords = searchBox.value;
   if (keywords.length > 0) {
-    var search_url = 'http://www.reddit.com/r/brocku/search?q=' + keywords + '&restrict_sr=on';
+    var search_url =
+      'http://www.reddit.com/r/brocku/search?q=' + keywords + '&restrict_sr=on';
     openUrl(search_url, true);
   }
 }
