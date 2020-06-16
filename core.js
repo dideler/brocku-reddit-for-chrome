@@ -203,25 +203,6 @@ function openLinkFront() {
   openUrl(this.href, true);
 }
 
-// Returns a string of the current time. Used in debug messages.
-function printTime(d) {
-  var hour = d.getHours();
-  var minute = d.getMinutes();
-  // Convert to 12-hour format.
-  var ap = hour > 11 ? 'PM' : 'AM'; // 0-11 is AM, 12-23 is PM.
-  if (hour > 12) {
-    hour -= 12;
-  }
-  if (hour == 0) {
-    hour = 12;
-  }
-  if (minute < 10) {
-    minute = '0' + minute;
-  }
-  var timeString = hour + ':' + minute + ' ' + ap;
-  return timeString;
-}
-
 // Opens URL in a new tab in the background or foreground.
 function openUrl(url, take_focus) {
   // Only allow http and https.
