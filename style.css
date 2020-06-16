@@ -6,7 +6,7 @@ a:hover { text-decoration: underline; }
 #header img { float: left; margin: -5px; }
 #header a, #header span, #header h1 { color: white; float: left; margin: 5px 2px 0 5px; }
 #title, a#title { font-weight: bold; font-size: 14px; margin-top: 5px; }
-#feed { min-width: auto; margin: 5px; font-size: 9pt; padding-bottom: 2px; }
+#feed { min-width: auto; margin: 5px; font-size: 9pt; padding-bottom: 2px; line-height: 18px; }
 #feed table, #feed a:visited, #feed td:nth-child(1), #searchbox { color: #551A8B; }
 #feed td { vertical-align:top; }
 .link { padding: 2px 0px; }
