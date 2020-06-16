@@ -51,7 +51,7 @@ function buildPopup(links) {
     var row = document.createElement('tr');
     row.className = 'link';
     var num = document.createElement('td');
-    num.innerText = i + 1;
+    num.innerText = String(i + 1).padStart(2, '0') + ".";
     var link_col = document.createElement('td');
     var title = document.createElement('a');
     title.className = 'link_title';
