@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "BrockU reddit",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "Displays recent submissions from /r/brocku",
   "icons": {
     "48": "icon48.png",
