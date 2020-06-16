@@ -1,12 +1,13 @@
-body { font-family: verdana, helvetica, arial, sans-serif; font-size: 10pt; background: #C00; }
+body { font-family: verdana, helvetica, arial, sans-serif; font-size: 10pt; background: #C00; padding-bottom: 10px; overflow: hidden; }
 a { text-decoration: none; color: blue; }
 a:hover { text-decoration: underline; }
-#container, #spinner { background: white;}
+#container, #spinner { background: white; width: 320px; }
 #header { height: 30px; background: #C00; color: #222; }
 #header img { float: left; margin: -5px; }
 #header a, #header span, #header h1 { color: white; float: left; margin: 5px 2px 0 5px; }
 #title, a#title { font-weight: bold; font-size: 14px; margin-top: 5px; }
-#feed { min-width: auto; margin: 5px; font-size: 9pt; padding-bottom: 2px; }
+#submitLink { padding-left: 22px; }
+#feed { min-width: auto; margin: 3px; font-size: 9pt; padding-bottom: 2px; line-height: 18px; }
 #feed table, #feed a:visited, #feed td:nth-child(1), #searchbox { color: #551A8B; }
 #feed td { vertical-align:top; }
 .link { padding: 2px 0px; }
@@ -16,5 +17,5 @@ a:hover { text-decoration: underline; }
 .left { float: left; }
 .right { float: right; }
 #spinner { height: 300px; text-align: center; padding-top: 50px; }
-#searchbox { margin: 12px 3px 0 26px; font-size: 11px; width: 215px; }
+#searchbox { margin: 9px 3px 0 30px; width: 200px; }
 #searchbutton { font-family: courier; }

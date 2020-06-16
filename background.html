@@ -1,41 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head>
-<script src="core.js"></script>
-<script src="json2.js"></script>
-<script>
-// Sets default values for the user options: notifications, request interval, background tabs.
-function init()
-{ 
-  // If no record of previous usage exists, notify user about notifications.
-  if (localStorage["notifications"] == null)
-  {
-    var notification = webkitNotifications.createHTMLNotification("initialNotification.html");
-    notification.show();
-    localStorage["notifications"] = false;
-  }
-  // If any options are not already set, they will be set to defaults here.
-  setInitialOption("requestInterval", 1800000); // 30 min intervals
-  setInitialOption("backgroundTabs", false);
-
-  startRequest();
-}
-
-// Starts the HTTP Request for the first request. Tries again every 60 seconds.
-function startRequest()
-{
-  // Initialize firstRequest if it hasn't been done yet.
-  if (typeof startRequest.firstRequest == 'undefined')
-  {
-    startRequest.firstRequest = true;
-  }
-  updateIfReady(startRequest.firstRequest);
-  startRequest.firstRequest = false;
-  // Tries again in 60 seconds in case enough interval time has passed.
-  window.setTimeout(startRequest, 60000);
-}
-</script>
-</head>
-<body onload='init()'>
-</body>
+  <head>
+    <script src="core.js"></script>
+    <script src="background.js"></script>
+  </head>
+  <body></body>
 </html>
