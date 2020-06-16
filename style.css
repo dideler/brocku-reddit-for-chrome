@@ -1,4 +1,4 @@
-body { font-family: verdana, helvetica, arial, sans-serif; font-size: 10pt; background: #C00; }
+body { font-family: verdana, helvetica, arial, sans-serif; font-size: 10pt; background: #C00; padding-bottom: 10px; }
 a { text-decoration: none; color: blue; }
 a:hover { text-decoration: underline; }
 #container, #spinner { background: white;}
